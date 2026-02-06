@@ -55,4 +55,4 @@ Create a small text file and practice:
   This will display the last 5 lines of the file
 
 
-![Handon](90DaysOfDevOps/2026/day-06/img/Image1.png)
+![Handon](img/Image1.png)
