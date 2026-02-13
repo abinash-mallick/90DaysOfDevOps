@@ -14,7 +14,7 @@
   Owner is the user who has created the file. Group is a collection of users who share permissions with the file.
   Any user who is a part of group will share the group permissions.
 
-![img](img/Picture1.PNG)
+![img](img/Picture1.png)
 
 
 ### Task:2 
@@ -23,7 +23,7 @@
   ```
   touch devops-file.txt
   ```
-  ![img](img/Picture2.PNG)
+  ![img](img/Picture2.png)
 - Check the current owner of file
   ```
   ls -l devops-file.txt
@@ -42,7 +42,7 @@
   ```
   ls -l devops-file.txt
   ```
-  ![img](img/Picture3.PNG)
+  ![img](img/Picture3.png)
 
   
 ### Task:3 
@@ -69,7 +69,7 @@
   ubuntu@ip-172-31-24-250:~$ ls -l team-notes.txt
   -rw-rw-r-- 1 ubuntu heist-team 0 Feb 13 06:39 team-notes.txt
   ```
-  ![img](img/Picture4.PNG)
+  ![img](img/Picture4.png)
 
 
 ### Task:4 
@@ -90,7 +90,7 @@
   ```
   sudo chown berlin:heist-team app-logs
   ```
-  ![img](img/Picture5.PNG)
+  ![img](img/Picture5.png)
 
 
 ### Task:5 
@@ -114,7 +114,7 @@
   ```
   ls -lR heist-project
   ```
-  ![img](img/Picture6.PNG)
+  ![img](img/Picture6.png)
 
 
 ### Task:6 
@@ -141,7 +141,7 @@
   sudo chown berlin:tech-team heist/blueprints.pdf
   sudo chown nairobi:vault-team heist/escape-plan.txt
   ```
-   ![img](img/Picture7.PNG)
+   ![img](img/Picture7.png)
 
 
 
