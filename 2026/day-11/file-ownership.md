@@ -1,16 +1,16 @@
 # Day 11 Challenge
 
 ## Files & Directories Created
-[list all files/directories]
+
 
 ## Ownership Changes
 [before/after for each file]
 
 Example:
-- devops-file.txt: user:user → tokyo:heist-team
+
 
 ## Commands Used
-[your commands here]
+- ls -l ==> This command is to list all the files and directories along with other details (permissions, owner, Group, size, last modified)
 
 ## What I Learned
-[3 key points about file ownership]
+
