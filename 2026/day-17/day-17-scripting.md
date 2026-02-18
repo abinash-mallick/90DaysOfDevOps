@@ -118,9 +118,28 @@ done
 ```
 
 ![img](img/Picture6.png)
-                                                                                                                                                                                           
 
+---
 
+### Task 5: Error Handling
+1. Create `safe_script.sh` that:
+   - Uses `set -e` at the top (exit on error)
+   - Tries to create a directory `/tmp/devops-test`
+   - Tries to navigate into it
+   - Creates a file inside
+   - Uses `||` operator to print an error if any step fails
+
+```
+#!/bin/bash
+set -e
+mkdir -p /tmp/devops-test
+cd /tmp/devops-test
+touch file1.txt || echo "Permission denied to create file"
+```
+
+![img](img/Picture7.png)
+
+---
 
 
 
