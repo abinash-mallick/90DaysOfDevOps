@@ -49,13 +49,87 @@
 - Which layers are “squashed” or missing metadata
 This is essentially a reverse‑chronological breakdown of how the image was constructed.
    
-3. Each line is a **layer**. Note how some layers show sizes and some show 0B
+2. Each line is a **layer**. Note how some layers show sizes and some show 0B
    ![img](img/Picture4.png)
    
-5. Write in your notes: What are layers and why does Docker use them?
+3. Write in your notes: What are layers and why does Docker use them?
    Layers are the building blocks of every Docker image. Each instruction in a Dockerfile creates a new layer, and Docker stacks these layers to form the final image. This design makes images faster to build, smaller to store, and more efficient to share
 
 ---
+
+### Task 3: Container Lifecycle
+
+1. **Create** a container (without starting it)
+   To create a container without starting it, command is:
+   ```
+   docker create <image id>
+   ```
+   ![img](img/Picture5.png)
+   
+2. **Start** the container
+   To start a container, the command is:
+   ```
+   docker start <container-id>
+   ```
+   ![img](img/Picture6.png)
+
+   
+3. **Pause** it and check status
+   To pause a container and check status, the command is:
+   ```
+   docker pause <container-id>
+   
+   ```
+   ![img](img/Picture7.png)
+
+
+4. **Unpause** it
+   To unpause a container, the command is:
+   ```
+   docker unpause <container-id>
+   ```
+   ![img](img/Picture8.png)
+
+   
+5. **Stop** it
+   Stopping a container means graceful shutdown.
+   To stop a container, the command is:
+   ```
+   docker stop <container-id>
+   ```
+   ![img](img/Picture9.png)
+   
+6. **Restart** it
+   To restart a container, the command is:
+   ```
+   docker restart <container-id>
+   ```
+   ![img](img/Picture10.png)
+
+7. **Kill** it
+   Killing a container means immidiate termination of the running container.
+   To kill a container, the command is:
+   ```
+   docker kill <container-id>
+   ```
+   ![img](img/Picture11.png)
+   
+8. **Remove** it
+   Before removing a container, it must be stopped. 
+   To remove a container, the command is:
+   ```
+   docker rm <container-id>
+   ```
+   ![img](img/Picture12.png)
+   
+
+---
+
+
+
+
+
+
 
 
 
