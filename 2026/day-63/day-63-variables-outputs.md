@@ -179,7 +179,7 @@ subnet_cidr  = "10.1.1.0/24"
 
 To apply this we need to pass this tfvars as argument durring terraform plan and apply
 
-` terraform plan -var-file = "prod.tfvars" `
+` terraform plan -var-file="prod.tfvars" `
 
 To Override with CLI:
 ```
@@ -250,6 +250,173 @@ output "subnet_id" {
 terraform output                          # Show all outputs
 terraform output instance_public_ip       # Show a specific output
 terraform output -json                    # JSON format for scripting
+
+---
+
+### Task 4: Use Data Sources
+Stop hardcoding the AMI ID. Use a data source to fetch it dynamically.
+
+1. Add a `data "aws_ami"` block that:
+   - Filters for Amazon Linux 2 images
+   - Filters for `hvm` virtualization and `gp2` root device
+   - Uses `owners = ["amazon"]`
+   - Sets `most_recent = true`
+
+2. Replace the hardcoded AMI in your `aws_instance` with `data.aws_ami.amazon_linux.id`
+
+3. Add a `data "aws_availability_zones"` block to fetch available AZs in your region
+
+4. Use the first AZ in your subnet: `data.aws_availability_zones.available.names[0]`
+
+Apply and verify -- your config now works in any region without changing the AMI.
+
+**Document:** What is the difference between a `resource` and a `data` source?
+
+---
+
+### Task 5: Use Locals for Dynamic Values
+1. Add a `locals` block:
+
+```
+locals {
+    name_prefix = "${var.project_name}-${var.environment}"
+    common_tags = {
+        Project     = var.project_name
+        Environment = var.environment
+        ManagedBy   = "Terraform"
+    }
+}
+```
+
+2. Replace all Name tags with `local.name_prefix`:
+   - VPC: `"${local.name_prefix}-vpc"`
+   - Subnet: `"${local.name_prefix}-subnet"`
+   - Instance: `"${local.name_prefix}-server"`
+  
+```
+locals {
+    name_prefix = "${var.project_name}-${var.environment}"
+    common_tags = {
+        Project     = var.project_name
+        Environment = var.environment
+        ManagedBy   = "Terraform"
+    }
+}
+
+
+resource "aws_vpc" "my_vpc" {
+
+  cidr_block = var.vpc_cidr
+  tags = {
+    Name = "${local.name_prefix}-vpc"
+  }
+
+}
+
+resource "aws_subnet" "my_subnet" {
+
+  vpc_id                  = aws_vpc.my_vpc.id
+  cidr_block              = var.subnet_cidr
+  map_public_ip_on_launch = true
+  tags = {
+    Name = "${local.name_prefix}-Subnet"
+  }
+}
+
+resource "aws_internet_gateway" "my_gateway" {
+
+  vpc_id = aws_vpc.my_vpc.id
+  tags = {
+    Name = "${local.name_prefix}-gateway"
+  }
+
+}
+
+resource "aws_route_table" "my_route" {
+  vpc_id = aws_vpc.my_vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.my_gateway.id
+  }
+}
+
+resource "aws_route_table_association" "my_rta" {
+  subnet_id      = aws_subnet.my_subnet.id
+  route_table_id = aws_route_table.my_route.id
+}
+
+resource "aws_security_group" "my_sg" {
+
+  vpc_id = aws_vpc.my_vpc.id
+  tags = {
+    Name = "${local.name_prefix}-SG"
+  }
+}
+
+
+resource "aws_vpc_security_group_ingress_rule" "allow_http" {
+  for_each          = { for port in var.allowed_ports : port => port }
+  security_group_id = aws_security_group.my_sg.id
+  cidr_ipv4         = aws_vpc.my_vpc.cidr_block
+  from_port         = each.value
+  ip_protocol       = "tcp"
+  to_port           = each.value
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
+  security_group_id = aws_security_group.my_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+}
+
+
+resource "aws_instance" "my_ec2" {
+
+  ami                         = var.ami_value
+  instance_type               = var.instance_type
+  subnet_id                   = aws_subnet.my_subnet.id
+  vpc_security_group_ids      = [aws_security_group.my_sg.id]
+  associate_public_ip_address = true
+  tags = {
+    Name = "${local.name_prefix}-server"
+  }
+}
+
+resource "aws_ec2_instance_state" "my_ec2" {
+  instance_id = aws_instance.my_ec2.id
+  state       = "stopped"
+}
+
+resource "aws_s3_bucket" "my_bucket" {
+  bucket     = "${local.name_prefix}-bkt-unq-007"
+  depends_on = [aws_instance.my_ec2]
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
